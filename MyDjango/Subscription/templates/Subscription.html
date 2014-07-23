@@ -1,9 +1,0 @@
-<h1>Subscription Page</h1>
-
-<form action="{% url 'Subscription:checkAAA' %}" method="post">
-{% csrf_token %}
-    Input Account Name:<input type="text" name="User_Account"/>
-    {% if check_message %}<p><strong>{{ check_message }}</strong></p>{% endif %}
-    <br>
-    <input type="submit" value="check" />
-</form>
