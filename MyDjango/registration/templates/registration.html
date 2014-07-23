@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<h1>Registration Page</h1>
+
+<form action="{% url 'registration:submit_account' %}" method="post">
+{% csrf_token %}
+    <label>Account</label>
+    <input type="email" name="User_Account" required {% if user_account%} value="{{ user_account }}"{% endif%}/>
+    <input type="submit" value="check" />
+    {% if check_message %}<strong>{{ check_message }}</strong>{% endif %}
+    <br>
+    <label>Password</label>
+    <input type="password" name="User_Password" required/>
+    <br>
+    <label>Name</label>
+    <input type="text" name="User_Name" required/>
+    <br>
+    <label>Male</label>
+    <input type="radio" name="User_Sex" id="M" value="M" required/>
+    <label>Female</label>
+    <input type="radio" name="User_Sex" id="F" value="F" required/>
+    <br>
+    <label>Birthday</label>
+    <input type="datetime" name="User_Birth" required/>
+    <br>
+    <input type="submit" value="Submit" required/>
+</form>
+</body>
+</html>
