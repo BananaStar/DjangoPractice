@@ -9,6 +9,14 @@ class UserInfo(models.Model):
         ('F', 'Female'),
     )
 
+    dicUserInfo = {
+        'userAccount': ('PK', 'email', 200),
+        'userPassword': ('password', 20),
+        'userName': ('text', 40),
+        'userSex': ('radio', ('M', 'F'), 1),
+        'userBirth': ('date'),
+    }
+
     userAccount = models.CharField(max_length=200, primary_key=True)
     userPassword = models.CharField(max_length=20)
     userName = models.CharField(max_length=40)

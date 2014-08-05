@@ -1,42 +1,38 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render,get_object_or_404
+from django.http import JsonResponse
+from django.http import HttpResponse
 from registration.models import UserInfo
 
 
-def index(request):
-    return render(request, 'registration.html', )
-
-
-def check(request):
-    try:
-        user_account = request.POST['User_Account']
-
-    except:
-        return render(request, 'registration.html', {
-            'check_message': "POST failed",
-        })
+def check_available(request, user_account):
     try:
         get_object_or_404(UserInfo, pk=user_account)
-        return render(request, 'registration.html', {
-            'check_message': "This account had been used. Please try other account.",
-        })
+        # 302 Found
+        return HttpResponse(status=302)
     except:
-        return render(request, 'registration.html', {
-            'check_message': "Good",
-            'user_account': user_account,
-        })
+        # 404 Not found
+        return HttpResponse(status=404)
 
 
 def submit_account(request):
-
     new_user = UserInfo()
-    new_user.userAccount = request.POST['User_Account']
-    new_user.userPassword = request.POST['User_Password']
-    new_user.userName = request.POST['User_Name']
-    new_user.userSex = request.POST['User_Sex']
-    new_user.userBirth = request.POST['User_Birth']
+    new_user.userAccount = request.POST['userAccount']
+    new_user.userPassword = request.POST['userPassword']
+    new_user.userName = request.POST['userName']
+    new_user.userSex = request.POST['userSex']
+    new_user.userBirth = request.POST['userBirth']
     new_user.FillInRegDate()
     new_user.save()
+    # 201 Created
+    return HttpResponse(status=201)
 
-    return render(request, 'reg_result.html', {
-        'check_message': 'Welcome '+new_user.userName+', your account had been created.',
-    })
+
+def index(request):
+    if request.method == 'POST':
+        return submit_account(request)
+    # 404 Not found
+    return HttpResponse(status=404)
+
+
+def test(request):
+    return render(request,'query_response.html',None)

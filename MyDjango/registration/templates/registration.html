@@ -7,28 +7,28 @@
 <body>
 <h1>Registration Page</h1>
 
-<form action="{% url 'registration:submit_account' %}" method="post">
+<form action="{% url 'registration:index' %}" method="post">
 {% csrf_token %}
     <label>Account</label>
-    <input type="email" name="User_Account" required {% if user_account%} value="{{ user_account }}"{% endif%}/>
+    <input type="email" name="userAccount" required {% if user_account%} value="{{ user_account }}"{% endif%}/>
     <input type="submit" value="check" />
-    {% if check_message %}<strong>{{ check_message }}</strong>{% endif %}
+    {% if message %}<strong>{{ message }}</strong>{% endif %}
     <br>
     <label>Password</label>
-    <input type="password" name="User_Password" required/>
+    <input type="password" name="userPassword" />
     <br>
     <label>Name</label>
-    <input type="text" name="User_Name" required/>
+    <input type="text" name="userName" />
     <br>
     <label>Male</label>
-    <input type="radio" name="User_Sex" id="M" value="M" required/>
+    <input type="radio" name="userSex" id="M" value="M" />
     <label>Female</label>
-    <input type="radio" name="User_Sex" id="F" value="F" required/>
+    <input type="radio" name="userSex" id="F" value="F" />
     <br>
     <label>Birthday</label>
-    <input type="datetime" name="User_Birth" required/>
+    <input type="datetime" name="userBirth" />
     <br>
-    <input type="submit" value="Submit" required/>
+    <input type="submit" value="Submit" />
 </form>
 </body>
 </html>

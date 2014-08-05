@@ -1,0 +1,91 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title></title>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js" ></script>
+        <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery.cookie/1.4.1/jquery.cookie.min.js"></script>
+        <script>
+
+        var csrftoken = $.cookie('csrftoken');
+
+        function csrfSafeMethod(method) {
+          // these HTTP methods do not require CSRF protection
+           return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+
+        function sameOrigin(url) {
+            // test that a given url is a same-origin URL
+            // url could be relative or scheme relative or absolute
+            var host = document.location.host; // host + port
+            var protocol = document.location.protocol;
+            var sr_origin = '//' + host;
+            var origin = protocol + sr_origin;
+            // Allow absolute or scheme relative URLs to same origin
+            return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+                (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+                // or any other URL that isn't scheme relative or absolute i.e relative.
+                !(/^(\/\/|http:|https:).*/.test(url));
+        }
+
+
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+                // Send the token to same-origin, relative URLs only.
+                // Send the token only if the method warrants CSRF protection
+                // Using the CSRFToken value acquired earlier
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+         
+         var funSubmit;
+         funSubmit =function() {
+             var URLs = "{% url 'registration:index' %}";
+             var elmMethod = document.getElementById("http_method");
+             $.ajax({
+
+                 url: URLs,
+                 data: $('#sentToBack').serialize(),
+                 type: elmMethod.value,
+                 dataType: 'text',
+                 success: function (msg) {
+                     var div = document.getElementById("HttpResponse");
+                     var InContent = "<span> msg:" + msg + "</span>";
+                     div.innerHTML= InContent;
+                 },
+
+                 error: function (xhr, ajaxOptions, thrownError) {
+                     var div = document.getElementById("HttpResponse");
+                     var InContent = "<span> status:" + xhr.status + "</span>";
+                         InContent = InContent + "<br><span>" + xhr.getAllResponseHeaders() + "</span>";
+                         //InContent = InContent + "<br><span>" + xhr.getContext()  + "</span>";
+                     div.innerHTML= InContent;
+                 }
+             });
+
+         };
+
+
+
+        </script>
+    </head>
+    <body>
+        <div id="HttpRequest">
+            <select name="http_method" id="http_method">
+                <option value="GET">GET</option>
+                <option value="POST">POST</option>
+                <option value="PUT">PUT</option>
+                <option value="DELETE">DELETE</option>
+            </select>
+            <form id="sentToBack">
+                <input type="text" name="Text"/>
+                <input type="button"  value="Send" onClick="funSubmit()"/>
+            </form>
+        </div>
+        <div id="HttpResponse">
+
+        </div>
+    </body>
+</html>
