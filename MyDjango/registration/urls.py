@@ -4,6 +4,7 @@ from registration import views
 urlpatterns = patterns('',
                        # ex: /registration/test/
                        url(r'^test/$', views.test, name='test'),
+                       url(r'^test2/$', views.test2, name='test'),
                        # ex: /registration/
                        url(r'^$', views.index, name='index'),
                        # ex: /registration/%user_account%

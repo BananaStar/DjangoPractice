@@ -1,12 +1,11 @@
-from django.shortcuts import render,get_object_or_404
-from django.http import JsonResponse
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from registration.models import UserInfo
 
 
 def check_available(request, user_account):
     try:
-        get_object_or_404(UserInfo, pk=user_account)
+        get_object_or_404(UserInfo, userAccount=user_account)
         # 302 Found
         return HttpResponse(status=302)
     except:
@@ -15,16 +14,19 @@ def check_available(request, user_account):
 
 
 def submit_account(request):
-    new_user = UserInfo()
-    new_user.userAccount = request.POST['userAccount']
-    new_user.userPassword = request.POST['userPassword']
-    new_user.userName = request.POST['userName']
-    new_user.userSex = request.POST['userSex']
-    new_user.userBirth = request.POST['userBirth']
-    new_user.FillInRegDate()
-    new_user.save()
-    # 201 Created
-    return HttpResponse(status=201)
+    try:
+        user = UserInfo.objects.create_user(
+            userAccount=request.POST['userAccount'],
+            userName=request.POST['userName'],
+            password=request.POST['userPassword'], )
+        user.userSex = request.POST['userSex']
+        user.userBirth = request.POST['userBirth']
+        user.save()
+        # 201 Created
+        return HttpResponse(status=201)
+    except:
+        # 409 Conflict
+        return HttpResponse(status=409, content='Account existed')
 
 
 def index(request):
@@ -34,5 +36,10 @@ def index(request):
     return HttpResponse(status=404)
 
 
+# For testing
 def test(request):
-    return render(request,'query_response.html',None)
+    return render(request, 'query_response.html', None)
+
+
+def test2(request):
+    return render(request, 'registration.html', None)

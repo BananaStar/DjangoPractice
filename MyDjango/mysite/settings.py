@@ -28,6 +28,9 @@ TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 
 ALLOWED_HOSTS = []
 
+#AUTH_USER_MODEL = "customauth.MyUser"
+AUTH_USER_MODEL = "registration.UserInfo"
+
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
@@ -41,9 +44,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'polls',
-    'UserLogin',
+#    'customauth',
     'registration',
+    #'polls',
 )
 
 MIDDLEWARE_CLASSES = (
